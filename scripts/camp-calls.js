@@ -156,3 +156,23 @@ document.addEventListener('click', function(event) {
         }
     }
 });
+
+// Function for showing Colemak-S and Colemak-DHS layouts
+function showLayoutS() {
+    localStorage.showLayoutS = 'true';
+    checkLayoutS();
+}
+
+// Function that checks localstorage value and shows S layouts
+function checkLayoutS() {
+    if (!localStorage.showLayoutS || localStorage.showLayoutS !== 'true') {
+        return;
+    }
+
+    let s1 = document.querySelector('#layout li[data-value="colemaks"]'),
+        s2 = document.querySelector('#layout li[data-value="colemakdhs"]');
+    
+    s1.classList.remove('dispose');
+    s2.classList.remove('dispose');
+}
+checkLayoutS();
