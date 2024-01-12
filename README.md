@@ -20,14 +20,14 @@ The following features are new in Colemak Camp:
 - Sharing and loading custom via links
 
 ## License
-As mentioned already, this project is under the **[GNU Affero General Public License v3.0 (AGPL-3.0)](https://www.gnu.org/licenses/agpl-3.0.en.html)**, but that only applies to the original Colemak Academy and this fork. Colemak Club does not mention a license (at the time of writing this), but it should also be the same. I phrase it like that because this project uses some elements thay don't fall under this license. Those are mentioned separately in this table:
+As mentioned already, this project is under the **[GNU Affero General Public License v3.0 (AGPL-3.0)](https://www.gnu.org/licenses/agpl-3.0.en.html)**, but that only applies to the original Colemak Academy and this fork. Colemak Club does not mention a license (at the time of writing this), but it should also be the same. I phrase it like that because this project uses some elements that don't fall under this license. Those are mentioned separately in this table:
 | Project Name                                                                            | Project License   |
 |-----------------------------------------------------------------------------------------|-------------------|
 | [Popper](https://popper.js.org/)                                                        | MIT               |
 | [Tippy.js](https://atomiks.github.io/tippyjs/)                                          | MIT               |
 | [Fork Awesome CSS](https://github.com/ForkAwesome/Fork-Awesome)                         | MIT               |
 | [Cuprum (Google Fonts)](https://fonts.google.com/specimen/Cuprum)                       | Open Font License |
-| [Radio Canda (Google Fonts)](https://fonts.google.com/specimen/Radio+Canada)            | Open Font License |
+| [Radio Canada (Google Fonts)](https://fonts.google.com/specimen/Radio+Canada)           | Open Font License |
 | [Cascadia Code (Microsoft)](https://github.com/microsoft/cascadia-code)                 | Open Font License |
 | [Material Icons (Google Fonts)](https://fonts.google.com/icons?selected=Material+Icons) | Apache-2.0        |
 
