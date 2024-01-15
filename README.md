@@ -14,6 +14,7 @@ The following features are new in Colemak Camp:
 - Cheatsheet keyboard is sized more accurately.
 - Custom input keyboard changes according to selected keyboard type.
 - Overall change in the design language.
+- Persistent custom layout via local storage.
 
 ### Planned Features
 - Custom themes
