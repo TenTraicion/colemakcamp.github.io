@@ -176,3 +176,19 @@ function checkLayoutS() {
     s2.classList.remove('dispose');
 }
 checkLayoutS();
+
+// Function that saves custom layout to localstorage
+function storeCustomLayout() {
+    setJSON('customLevelDictionary', levelDictionaries['custom']);
+    setJSON('customLayoutMap', layoutMaps['custom']);
+}
+
+// Automatically restore custom layout if available in localstorage
+(function() {
+    if (!localStorage.customLevelDictionary || !localStorage.customLayoutMap) {
+        return;
+    }
+
+    levelDictionaries['custom'] = getJSON('customLevelDictionary');
+    layoutMaps['custom'] = getJSON('customLayoutMap');
+})();

@@ -341,8 +341,9 @@ document.addEventListener('keydown', (e)=> {
         closeMenu();
 
         // close custom ui menu
-        if (customInput.classList.contains('show')){
-            customInput.classList.remove('show');
+        if (customInput.classList.contains('show')) {
+            discardButton.click();
+            // customInput.classList.remove('show');
             // remove active class from current key
             clearSelectedInput();
             init();
@@ -642,7 +643,7 @@ function playErrorSound() {
 /*______________listeners for custom ui input________________*/
 
 function updateLayoutUI() {
-    let cSheet, cInput;
+    let cSheet;
     switch (currentKeyboard) {
         case 'ansi':
             cSheet = document.querySelector('.cheatsheet');
@@ -845,19 +846,32 @@ function changeKeyboard(value) {
 
 // listener for custom layout ui open button
 openUIButton.addEventListener('click', ()=> {
-    startCustomKeyboardEditing();
+    startCustomKeyboardEditing(true);
 });
 
 // called whenever a user opens the custom editor. Sets correct displays and saves an initial state
 // of the keyboard to refer back to if the user wants to discard changes
-function startCustomKeyboardEditing() {
-    initialCustomKeyboardState = Object.assign({}, layoutMaps['custom']);
-    initialCustomLevelsState = Object.assign({}, levelDictionaries['custom']);
+function startCustomKeyboardEditing(user) {
+    if (!localStorage.customLevelDictionary || !localStorage.customLayoutMap) {
+        initialCustomKeyboardState = Object.assign({}, layoutMaps['custom']);
+        initialCustomLevelsState = Object.assign({}, levelDictionaries['custom']);
+    } else {
+        initialCustomKeyboardState = Object.assign({}, getJSON('customLayoutMap'));
+        initialCustomLevelsState = Object.assign({}, getJSON('customLevelDictionary'));
+    }
     // customInput.style.display = 'flex';
+
+    loadCustomLayout(initialCustomKeyboardState);
+    loadCustomLevels(initialCustomLevelsState);
+
+    if (user !== true && localStorage.customLevelDictionary && localStorage.customLayoutMap) {
+        return;
+    }
 
     subSection.classList.remove('dispose');
     setTimeout(function() {
         customInput.classList.add('show');
+        document.querySelector('.currentCustomLevel').click();
     }, 10);
 
     // customInput.style.transform = 'scaleX(1)';
@@ -880,6 +894,7 @@ function selectInputKey(k){
 
 // listener for the custom layout ui 'done' button
 saveButton.addEventListener('click', ()=> {
+    storeCustomLayout();
     //customInput.style.transform = 'scaleX(0)';
     customInput.classList.remove('show');
     setTimeout(function() {
@@ -970,7 +985,7 @@ document.addEventListener('click', function (e) {
         let allCKeys = document.querySelectorAll('row.custom > key');
         for(n of allCKeys) {
             if(n.children[0].innerHTML != 0 &&
-                levelDictionaries['custom'][currentSelectedLevel.innerHTML].includes(n.children[0].innerHTML)) {
+                levelDictionaries['custom'][currentSelectedLevel.getAttribute('data-level')].includes(n.children[0].innerHTML)) {
                     n.classList.add('active');
             } else {
                 n.classList.remove('active');
