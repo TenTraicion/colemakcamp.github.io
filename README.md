@@ -4,7 +4,7 @@ A fork of Colemak Club that overhauls the entire experience. Brings support for 
 It is hosted on this repo's [Github Pages](https://colemakcamp.github.io/).
 
 ## Forked from Colemak Club
-This project is a fork of [Colemak Club](https://github.com/gnusenpai/colemakclub), which itself is a fork of [Colemak Academy](https://colemak.academy/). The source project is AGPL-3.0, as discussed in this [issue](https://github.com/Nemcorp/layoutacademy/issues/2). This project also retains that license.
+This project is a fork of [Colemak Club](https://github.com/gnusenpai/colemakclub), which itself is a fork of [Colemak Academy](https://colemak.academy/). The source project is AGPL-3.0, as discussed in this . This project also retains that license.
 
 ## Key Features
 The following features are new in Colemak Camp:
@@ -21,7 +21,9 @@ The following features are new in Colemak Camp:
 - Sharing and loading custom via links
 
 ## License
-As mentioned already, this project is under the **[GNU Affero General Public License v3.0 (AGPL-3.0)](https://www.gnu.org/licenses/agpl-3.0.en.html)**, but that only applies to the original Colemak Academy and this fork. Colemak Club does not mention a license (at the time of writing this), but it should also be the same. I phrase it like that because this project uses some elements that don't fall under this license. Those are mentioned separately in this table:
+This project is under the **[GNU Affero General Public License v3.0 (AGPL-3.0)](https://www.gnu.org/licenses/agpl-3.0.en.html)**, which is the same as Colemak Club and Colemak Academy, as seen in this [issue](https://github.com/Nemcorp/layoutacademy/issues/2).
+
+Parts of the project that are not a part of this license are mentioned in this table:
 | Project Name                                                                            | Project License   |
 |-----------------------------------------------------------------------------------------|-------------------|
 | [Popper](https://popper.js.org/)                                                        | MIT               |
@@ -33,7 +35,7 @@ As mentioned already, this project is under the **[GNU Affero General Public Lic
 | [Material Icons (Google Fonts)](https://fonts.google.com/icons?selected=Material+Icons) | Apache-2.0        |
 
 ## Icon Attributions
-Some of the icons have been taken from Flaticon, which requires attribution. So, here is a list of every icon in the `fontasm` font file that are directly taken from Flaticon or modified based on something from Flaticon.
+Some of the icons have been taken from Flaticon, which requires attribution. Below is a list of all the icons in the `fontasm` font file that are directly taken from Flaticon or modified based on something from Flaticon.
 | Icon Class      | Attribution                                                                        |
 |-----------------|------------------------------------------------------------------------------------|
 | fa-arrow-top    | [Flaticon](https://www.flaticon.com/free-icon/arrow-angle-pointing-to-right_54900) |
