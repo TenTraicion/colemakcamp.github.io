@@ -91,7 +91,8 @@ var lineIndex = 0;  // tracks which line of the prompt we are currently on
 var wordIndex = 0;  // tracks which word you are on (ONLY IN PARAGRAPH MODE)
 var idCount = 0;
 var answerWordArray = [];
-var specialKeyCodes = [27, 9, 20, 17, 18, 93, 36, 37, 38, 39, 40, 144, 36, 8, 16, 30, 32, 13, 91, 92, 224, 225]; // list of all keycodes for keys we typically want to ignore
+// var specialKeyCodes = [27, 9, 20, 17, 18, 93, 36, 37, 38, 39, 40, 144, 36, 8, 16, 30, 32, 13, 91, 92, 224, 225]; // list of all keycodes for keys we typically want to ignore
+let specialKeys = ["Pause", "ScrollLock", "Insert", "PageUp", "PageDown", "Delete", "End", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Escape", "Tab", "CapsLock", "Control", "Alt", "ContextMenu", "Home", "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "NumLock", "Backspace", "Shift", " ", "Enter", "OS" ]; // list of all keys we typically want to ignore
 var punctuation = localStorage.getItem('punctuation') || ''; // this contains punctuation to include in our test sets. Set to empty at first
 var requiredLetters = '';//levelDictionaries[currentLayout]['lvl'+currentLevel]+punctuation;; // keeps track of letters that still need to be used in the current level
 var initialCustomKeyboardState = ''; // saves a temporary copy of a keyboard layout that a user can return to by discarding changes
@@ -337,7 +338,8 @@ function toggleMenu() {
 // close preference menu on escape key. While we're at it, also close custom
 // ui menu
 document.addEventListener('keydown', (e)=> {
-    if(e.keyCode == 27) {
+    // if(e.keyCode == 27) {
+    if (e.key === "Escape") {
         closeMenu();
 
         // close custom ui menu
@@ -1010,9 +1012,18 @@ customUIKeyInput.addEventListener('keydown', (e)=> {
 
     // if key entered is not shift, control, space, caps, enter, backspace, escape, 
     // or delete, left or right arrows, update dom element and key mapping value
-    if(e.keyCode != 16 && e.keyCode != 17 && e.keyCode != 27 && e.keyCode != 46 && e.keyCode 
-        != 32 && e.keyCode != 8 && e.keyCode != 20 && e.keyCode != 13 && e.keyCode != 37 
-        && e.keyCode != 39 && e.keyCode != 38 && e.keyCode != 40) {
+    if (/*e.keyCode != 16*/ e.key === "Shift" &&
+        /*e.keyCode != 17*/ e.key === "Control" &&
+        /*e.keyCode != 27*/ e.key === "Escape" &&
+        /*e.keyCode != 46*/ e.key === "Delete" &&
+        /*e.keyCode != 32*/ e.key === " " &&
+        /*e.keyCode != 8 */ e.key === "Backspace" &&
+        /*e.keyCode != 20*/ e.key === "CapsLock" &&
+        /*e.keyCode != 13*/ e.key === "Enter" &&
+        /*e.keyCode != 37*/ e.key === "ArrowLeft" &&
+        /*e.keyCode != 39*/ e.key === "ArrowRight" &&
+        /*e.keyCode != 38*/ e.key === "ArrowUp" &&
+        /*e.keyCode != 40*/ e.key === "ArrowDown") {
         // let currentUILev = document.querySelector('.currentCustomUILevel').innerHTML;
         let currentUILev = document.querySelector('.currentCustomLevel').getAttribute('data-level');
         k.children[0].innerHTML = e.key;
@@ -1046,7 +1057,8 @@ customUIKeyInput.addEventListener('keydown', (e)=> {
         
         // switch to next input key
         switchSelectedInputKey('right');
-    }else if(e.keyCode == 8 || e.keyCode == 46 ) {
+    }else if (/*e.keyCode == 8 */ e.key === "Backspace" ||
+              /*e.keyCode == 46*/ e.key === "Delete" ) {
         // switchSelectedInputKey('left');
         // if backspace, remove letter from the ui element and the keyboard map
         k.children[0].innerHTML = '_';
@@ -1059,16 +1071,16 @@ customUIKeyInput.addEventListener('keydown', (e)=> {
             layoutMaps.custom[k.id] = ' ';
             removeKeyFromLevels(k);
         }
-    }else if(e.keyCode == 37) {
+    }else if (/*e.keyCode == 37*/ e.key === "ArrowLeft") {
         switchSelectedInputKey('left');
-    }else if(e.keyCode == 39) {
+    }else if (/*e.keyCode == 39*/ e.key === "ArrowRight") {
         console.log('right');
         switchSelectedInputKey('right');
-    }else if(e.keyCode == 38) {
-        console.log('up');
+    }else if (/*e.keyCode == 38*/ e.key === "ArrowUp") {
+        // console.log('up');
         switchSelectedInputKey('up');
-    }else if(e.keyCode == 40) {
-        console.log('down');
+    }else if (/*e.keyCode == 40*/ e.key === "ArrowDown") {
+        // console.log('down');
         switchSelectedInputKey('down');
     }
 
@@ -1203,8 +1215,174 @@ function clearSelectedInput() {
 /*______________listeners for custom ui input________________*/
 /*___________________________________________________________*/
 
+// input key listener on Android
+// input.addEventListener('compositionupdate', (e)=> {
+//     console.log(e.data);
+
+//     let keyPress = e.data.slice(-1);
+
+//     // removes first line on the first letter of the first word of a new line
+//     if(deleteLatestWord) {
+//         prompt.classList.remove('smoothScroll');
+//         // delete last line fromt prompt and set the offset back to 0
+//         prompt.firstChild.removeChild(prompt.firstChild.firstChild);
+//         if(prompt.firstChild.children.length == 0){
+//             prompt.removeChild(prompt.firstChild);
+//         }
+//         promptOffset = 0;
+//         prompt.style.left = '-' + promptOffset+ 'px';
+//         deleteLatestWord = false;
+//     }
+
+//     let keysList = {
+//         "q": ["KeyQ", "lower"],
+//         "w": ["KeyW", "lower"],
+//         "e": ["KeyE", "lower"],
+//         "r": ["KeyR", "lower"],
+//         "t": ["KeyT", "lower"],
+//         "y": ["KeyY", "lower"],
+//         "u": ["KeyU", "lower"],
+//         "i": ["KeyI", "lower"],
+//         "o": ["KeyO", "lower"],
+//         "p": ["KeyP", "lower"],
+//         "a": ["KeyA", "lower"],
+//         "s": ["KeyS", "lower"],
+//         "d": ["KeyD", "lower"],
+//         "f": ["KeyF", "lower"],
+//         "g": ["KeyG", "lower"],
+//         "h": ["KeyH", "lower"],
+//         "j": ["KeyJ", "lower"],
+//         "k": ["KeyK", "lower"],
+//         "l": ["KeyL", "lower"],
+//         "z": ["KeyZ", "lower"],
+//         "x": ["KeyX", "lower"],
+//         "c": ["KeyC", "lower"],
+//         "v": ["KeyV", "lower"],
+//         "b": ["KeyB", "lower"],
+//         "n": ["KeyN", "lower"],
+//         "m": ["KeyM", "lower"],
+//         ";": ["Semicolon", "lower"],
+
+//         "Q": ["KeyQ", "upper"],
+//         "W": ["KeyW", "upper"],
+//         "E": ["KeyE", "upper"],
+//         "R": ["KeyR", "upper"],
+//         "T": ["KeyT", "upper"],
+//         "Y": ["KeyY", "upper"],
+//         "U": ["KeyU", "upper"],
+//         "I": ["KeyI", "upper"],
+//         "O": ["KeyO", "upper"],
+//         "P": ["KeyP", "upper"],
+//         "A": ["KeyA", "upper"],
+//         "S": ["KeyS", "upper"],
+//         "D": ["KeyD", "upper"],
+//         "F": ["KeyF", "upper"],
+//         "G": ["KeyG", "upper"],
+//         "H": ["KeyH", "upper"],
+//         "J": ["KeyJ", "upper"],
+//         "K": ["KeyK", "upper"],
+//         "L": ["KeyL", "upper"],
+//         "Z": ["KeyZ", "upper"],
+//         "X": ["KeyX", "upper"],
+//         "C": ["KeyC", "upper"],
+//         "V": ["KeyV", "upper"],
+//         "B": ["KeyB", "upper"],
+//         "N": ["KeyN", "upper"],
+//         "M": ["KeyM", "upper"],
+//         ":": ["Semicolon", "upper"]
+//     };
+
+//     let backspaced = false,
+//         spaced = false;
+
+//     // Determine if character length has increased or not
+//     if (window.compositLength) {
+//         // New valid character
+//         if (window.compositLength == e.data.length + 1) {
+//             backspaced = false;
+//             spaced = false;
+//         } else
+//         // Backspaced
+//         if (window.compositLength == e.data.length - 1) {
+//             backspaced = true;
+//             spaced = false;
+//         } else
+//         // Space clicked
+//         if (window.compositLength == e.data.length) {
+//             backspaced = false;
+//             spaced = true;
+//         }
+//     }
+
+//     // Update to new length
+//     window.compositLength = e.data.length;
+
+//     let char, charCase;
+
+//     // find matching key if not backspaced or spaced
+//     if (!backspaced && !spaced) {
+//         char = keysList[keyPress][0]; // KeyQ
+//         charCase = keysList[keyPress][1]; // lower
+//     } else if (backspaced) {
+//         char = "Backspace";
+//     } else if (spaced) {
+//         char = "Space";
+//     }
+
+//     // prevent default char from being typed and replace new char from keyboard map
+//     if (localStorage.getItem('keyRemapping') === 'true') {
+//         if(char in keyboardMap && gameOn) {
+//             if (charCase !== "upper") {
+//                 input.value += keyboardMap[char];
+//             } else {
+//             // if shift key is pressed, get final input from
+//             // keymap shift layer. If shiftlayer doesn't exist
+//             // use a simple toUpperCase
+//                 if (keyboardMap.shiftLayer == 'default') {
+//                     input.value += keyboardMap[char].toUpperCase();
+//                 } else {
+//                     // get char from shiftLayer
+//                     input.value += keyboardMap.shiftLayer[char];
+//                 }
+//             }
+//         }
+//     }
+
+//     if (spaced && e.data.length > 0) {
+//         if (checkAnswer() && gameOn) {
+
+//             // stops a ' ' character from being put in the input bar
+//             // it wouldn't appear until after this function, and would
+//             // still be there when the user goes to type the next word
+//             // e.preventDefault();
+
+//             handleCorrectWord();
+
+//             // update scoreText
+//             updateScoreText();
+
+//             // end game if score == scoreMax
+//             if(score >= scoreMax){
+//                 endGame();
+//             }
+
+//             // clear input field
+//             document.querySelector('#userInput').value = '';
+
+//             // set letter index (where in the word the user currently is)
+//             // to the beginning of the word
+//             letterIndex = 0;
+//         } else {
+//             console.log('error space');
+//             input.value += ' ';
+//             letterIndex++;
+//         }
+//     }// end keyEvent if statement
+// });
+
 // input key listener
 input.addEventListener('keydown', (e)=> {
+    if (e.key == "Unidentified") {return;}
 
     // removes first line on the first letter of the first word of a new line
     if(deleteLatestWord) {
@@ -1226,7 +1404,6 @@ input.addEventListener('keydown', (e)=> {
     // get rid of default key press. We'll handle it ourselves
     e.preventDefault();
 
-
     // this is the actual character typed by the user
     let char = e.code;
 
@@ -1239,19 +1416,20 @@ input.addEventListener('keydown', (e)=> {
             // if shift key is pressed, get final input from
             // keymap shift layer. If shiftlayer doesn't exist
             // use a simple toUpperCase
-                if(keyboardMap.shiftLayer == 'default'){
+                if (keyboardMap.shiftLayer == 'default') {
                     input.value += keyboardMap[char].toUpperCase();
-                }else {
+                } else {
                     // get char from shiftLayer
                     input.value += keyboardMap.shiftLayer[char];
                 }
             }
         }
-    }else {
+    } else {
         //console.log(e.keyCode);
         //console.log(specialKeyCodes.includes(e.keyCode));
         // there is a bug on firefox that occassionally reads e.key as process, hence the boolean expression below
-        if(!specialKeyCodes.includes(e.keyCode) && e.key != 'Process') {
+        // if(!specialKeyCodes.includes(e.keyCode) && e.key != 'Process') {
+        if (!specialKeys.includes(e.key) && e.key != 'Process') {
             //console.log('Key: ' +e.key);
             //console.log('Code: ' +e.code);
             if(e.key != 'Process'){
@@ -1259,13 +1437,13 @@ input.addEventListener('keydown', (e)=> {
             }else {
                 letterIndex--;
             }
-        }else {
+        }/*else {
             //console.log('special Key');
-        }
-        if(e.keyCode == 32){
+        }*/
+        /*if (e.keyCode == 32){
             //console.log('space bar');
             //input.value += ' ';
-        }
+        }*/
     }
 
     /*____________________key mapping____________________*/
@@ -1278,7 +1456,8 @@ input.addEventListener('keydown', (e)=> {
     // correct word. If yes, generate new word. If no, give user
     // negative feedback
 
-    if(e.keyCode === 13 || e.keyCode === 32) {
+    if (/*e.keyCode === 13*/ e.key === "Enter" ||
+        /*e.keyCode === 32*/ e.key === " ") {
         if(checkAnswer() && gameOn) {
 
             // stops a ' ' character from being put in the input bar
@@ -1310,12 +1489,13 @@ input.addEventListener('keydown', (e)=> {
         }
     }// end keyEvent if statement
 
-    if(e.keyCode === 9 || e.keyCode === 27) {
+    if (/*e.keyCode === 9 */ e.key === "Tab" ||
+        /*e.keyCode === 27*/ e.key === "Escape") {
         // 9 = Tab, 27 = Esc
         reset();
-    } else if (e.keyCode === 116) {
+    } else if (/*e.keyCode === 116*/ e.key === "F5") {
         // F5 does not reload page because of the input area without this if-else
-        window.location.reload();
+        window.location.reload(true);
     }// end of reset key check
 
     /*____________________listener for space and enter keys and reset keys____________________*/
@@ -1327,7 +1507,7 @@ input.addEventListener('keydown', (e)=> {
     /*____________________accuracy checking____________________*/
 
     // if we have a backspace, decrement letter index and role back the input value
-    if(e.keyCode == 8) {
+    if (/*e.keyCode == 8*/ e.key === "Backspace") {
         //console.log('backspace');
         if(!e.ctrlKey) {
             input.value = input.value.substr(0,input.value.length-1);
@@ -1341,7 +1521,8 @@ input.addEventListener('keydown', (e)=> {
 
     // if key produces a character, (ie not shift, backspace, or another 
     // utility key) increment letter index
-    if(!specialKeyCodes.includes(e.keyCode)) {
+    // if (!specialKeyCodes.includes(e.keyCode)) {
+    if (!specialKeys.includes(e.key)) {
         letterIndex++;
     }
 
@@ -1350,7 +1531,7 @@ input.addEventListener('keydown', (e)=> {
     if(checkAnswerToIndex()) {
         input.style.color = 'var(--text-color)';//'black';
         // no points awarded for backspace
-        if(e.keyCode == 8) {
+        if (/*e.keyCode == 8*/ e.key === "Backspace") {
             playClickSound();
             // if backspace, color it grey again
             if(e.ctrlKey) {
@@ -1362,11 +1543,13 @@ input.addEventListener('keydown', (e)=> {
                 input.value = '';
                 letterIndex = 0;
             } else {
-                if(prompt.children[0].children[wordIndex].children[letterIndex]) {
+                if (prompt.children[0].children[wordIndex].children[letterIndex]) {
                     prompt.children[0].children[wordIndex].children[letterIndex].style.color = 'var(--grey)';//'gray';
                 }
             }
-        } else if(!specialKeyCodes.includes(e.keyCode) || e.keyCode == 32) {
+        // } else if (!specialKeyCodes.includes(e.keyCode) ||
+        } else if (!specialKeys.includes(e.key) ||
+                   /*e.keyCode == 32*/ e.key === " ") {
             playClickSound();
             correct++;
             // if letter (in the prompt) exists, color it green
@@ -1378,7 +1561,7 @@ input.addEventListener('keydown', (e)=> {
         console.log('error');
         input.style.color = 'var(--red)';//'red';
         // no points awarded for backspace
-        if(e.keyCode == 8) {
+        if (/*e.keyCode == 8*/ e.key === "Backspace") {
             playClickSound();
             // if backspace, color it grey again
             if(e.ctrlKey) {
@@ -1394,7 +1577,9 @@ input.addEventListener('keydown', (e)=> {
                     prompt.children[0].children[wordIndex].children[letterIndex].style.color = 'var(--grey)';//'gray';
                 }
             }
-        } else if(!specialKeyCodes.includes(e.keyCode) || e.keyCode == 32) {
+        // } else if (!specialKeyCodes.includes(e.keyCode) ||
+        } else if (!specialKeys.includes(e.key) ||
+                   /*e.keyCode == 32*/ e.key === " ") {
             playErrorSound();
             errors++;
             if(prompt.children[0].children[wordIndex].children[letterIndex-1]) {
