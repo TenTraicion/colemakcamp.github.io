@@ -172,3 +172,12 @@ function storeCustomLayout() {
     levelDictionaries['custom'] = getJSON('customLevelDictionary');
     layoutMaps['custom'] = getJSON('customLayoutMap');
 })();
+
+// Reload page when clicked on Colemak Camp logo
+document.addEventListener('click', function(e) {
+    let logo = document.querySelector('header left');
+
+    if (e.target == logo || logo.contains(e.target)) {
+        window.location.reload(true);
+    }
+});
