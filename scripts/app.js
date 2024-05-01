@@ -505,7 +505,7 @@ wordLimitModeInput.addEventListener('change', ()=> {
     reset();
 });
 
-// word scrolling mode 
+// word scrolling mode
 function toggleWordScrollingModeUI() {
     prompt.classList.toggle('paragraph');
     // remove fade from parent
@@ -519,7 +519,7 @@ wordScrollingModeButton.addEventListener('click', ()=> {
     reset();
 });
 
-// punctuation mode 
+// punctuation mode
 punctuationModeButton.addEventListener('click', ()=> {
     console.log('punctuation mode toggled');
     // if turning punctuation mode on
@@ -2150,7 +2150,17 @@ function updateScoreText() {
 }
 
 function resetTimeText() {
-    timeText.innerHTML = minutes + 'm :' + seconds + ' s';
+    let mins = minutes, secs = seconds;
+
+    if (minutes.toString().length === 1) {
+        mins = '0' + minutes;
+    }
+    if (seconds.toString().length === 1) {
+        secs = '0' + seconds;
+    }
+    
+    // timeText.innerHTML = minutes + 'm :' + seconds + ' s';
+    timeText.innerText = mins + ':' + secs;
 }
 
 // removes currentLevel styles from all buttons. Use every time the 
