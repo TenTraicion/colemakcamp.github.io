@@ -58,6 +58,15 @@ $globalshadow: 0 0 .9rem .4rem var(--nav-shadow);
     width: var(--_key-width);
 }
 
+@keyframes flashCaret {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
 /* `:root {
     --accent-lite: #87cef5;
     --accent-half: #7398d9;
@@ -931,7 +940,7 @@ select {
     width: calc(100% - (2 * var(--_rem)));
     max-width: calc(112 * var(--_rem));
     font-family: $monofont;
-    input {
+    #fakeInput {
         height: calc(8 * var(--_rem));
         font-size: calc(4 * var(--_rem));
         width: 86%;
@@ -941,6 +950,38 @@ select {
         color: var(--text-color);
         border-radius: $globalradius;
         padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        &.showCaret {
+            &::after {
+                content: '';
+                height: calc(4 * var(--_rem));
+                width: .2rem;
+                background: var(--accent-half);
+                opacity: 1;
+                animation: flashCaret 1s infinite;
+            }
+            &:not([data-hits='0']) {
+                &::after {
+                    animation: none;
+                }
+            }
+        }
+        &.red {
+            color: var(--red);
+            &.showCaret {
+                &::after {
+                    background: var(--red);
+                }
+            }
+        }
+    }
+    #userInput {
+        height: 10px;
+        width: 10px;
+        position: fixed;
+        left: -100vw;
+        top: -100vh;
     }
     .fade {
         mask-image: linear-gradient(to right, rgba(0,0,0,1) 75%, rgba(0,0,0,0));

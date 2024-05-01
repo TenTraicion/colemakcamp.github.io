@@ -3,8 +3,7 @@ A fork of Colemak Club that overhauls the entire experience. Brings support for 
 
 It is hosted on this repo's [Github Pages](https://colemakcamp.github.io/).
 
-## Forked from Colemak Club
-This project is a fork of [Colemak Club](https://github.com/gnusenpai/colemakclub), which itself is a fork of [Colemak Academy](https://colemak.academy/). The source project is AGPL-3.0, as discussed in this . This project also retains that license.
+Note that this project is a fork of [Colemak Club](https://github.com/gnusenpai/colemakclub), which itself is a fork of [Colemak Academy](https://colemak.academy/).
 
 ## Key Features
 The following features are new in Colemak Camp:

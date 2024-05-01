@@ -19,7 +19,8 @@ wpmText         = document.querySelector('#wpmText'),
 //
 testResults     = document.querySelector('#testResults'),
 //
-input             = document.querySelector('#userInput'), 
+input             = document.querySelector('#userInput'),
+fakeInput       = document.querySelector('#fakeInput'),
 // the main typing area
 inputKeyboard     = document.querySelector('#inputKeyboard'), 
 // keyboard layout customization ui
@@ -1057,8 +1058,8 @@ customUIKeyInput.addEventListener('keydown', (e)=> {
         
         // switch to next input key
         switchSelectedInputKey('right');
-    }else if (/*e.keyCode == 8 */ e.key === "Backspace" ||
-              /*e.keyCode == 46*/ e.key === "Delete" ) {
+    } else if (/*e.keyCode == 8 */ e.key === "Backspace" ||
+               /*e.keyCode == 46*/ e.key === "Delete" ) {
         // switchSelectedInputKey('left');
         // if backspace, remove letter from the ui element and the keyboard map
         k.children[0].innerHTML = '_';
@@ -1402,7 +1403,8 @@ input.addEventListener('keydown', (e)=> {
     /*____________________key mapping____________________*/
 
     // get rid of default key press. We'll handle it ourselves
-    e.preventDefault();
+    // e.preventDefault();
+    // this is no longer required if we push the correct characters to the fake input
 
     // this is the actual character typed by the user
     let char = e.code;
@@ -1411,16 +1413,19 @@ input.addEventListener('keydown', (e)=> {
     if (localStorage.getItem('keyRemapping') === 'true') {
         if(char in keyboardMap && gameOn) {
             if(!e.shiftKey) {
-                input.value += keyboardMap[char];
+                // input.value += keyboardMap[char];
+                fakeInput.innerText += keyboardMap[char];
             }else {
             // if shift key is pressed, get final input from
             // keymap shift layer. If shiftlayer doesn't exist
             // use a simple toUpperCase
                 if (keyboardMap.shiftLayer == 'default') {
-                    input.value += keyboardMap[char].toUpperCase();
+                    // input.value += keyboardMap[char].toUpperCase();
+                    fakeInput.innerText += keyboardMap[char].toUpperCase();
                 } else {
                     // get char from shiftLayer
-                    input.value += keyboardMap.shiftLayer[char];
+                    // input.value += keyboardMap.shiftLayer[char];
+                    fakeInput.innerText += keyboardMap.shiftLayer[char];
                 }
             }
         }
@@ -1433,7 +1438,8 @@ input.addEventListener('keydown', (e)=> {
             //console.log('Key: ' +e.key);
             //console.log('Code: ' +e.code);
             if(e.key != 'Process'){
-                input.value += e.key;
+                // input.value += e.key;
+                fakeInput.innerText += e.key;
             }else {
                 letterIndex--;
             }
@@ -1458,7 +1464,7 @@ input.addEventListener('keydown', (e)=> {
 
     if (/*e.keyCode === 13*/ e.key === "Enter" ||
         /*e.keyCode === 32*/ e.key === " ") {
-        if(checkAnswer() && gameOn) {
+        if (checkAnswer() && gameOn) {
 
             // stops a ' ' character from being put in the input bar
             // it wouldn't appear until after this function, and would
@@ -1476,15 +1482,18 @@ input.addEventListener('keydown', (e)=> {
             }
 
             // clear input field
-            document.querySelector('#userInput').value = '';
+            // document.querySelector('#userInput').value = '';
+            input.value = '';
+            fakeInput.innerText = '';
 
             // set letter index (where in the word the user currently is)
             // to the beginning of the word
             letterIndex = 0;
         
-        }else {
+        } else {
             console.log('error space');
             input.value += ' ';
+            fakeInput.innerText += ' '; // used a non-breaking space due to flexbox
             letterIndex++;
         }
     }// end keyEvent if statement
@@ -1492,6 +1501,7 @@ input.addEventListener('keydown', (e)=> {
     if (/*e.keyCode === 9 */ e.key === "Tab" ||
         /*e.keyCode === 27*/ e.key === "Escape") {
         // 9 = Tab, 27 = Esc
+        e.preventDefault();
         reset();
     } else if (/*e.keyCode === 116*/ e.key === "F5") {
         // F5 does not reload page because of the input area without this if-else
@@ -1509,12 +1519,13 @@ input.addEventListener('keydown', (e)=> {
     // if we have a backspace, decrement letter index and role back the input value
     if (/*e.keyCode == 8*/ e.key === "Backspace") {
         //console.log('backspace');
-        if(!e.ctrlKey) {
-            input.value = input.value.substr(0,input.value.length-1);
+        if (!e.ctrlKey) {
+            // input.value = input.value.substr(0,input.value.length-1);
+            fakeInput.innerText = fakeInput.innerText.slice(0, -1);
             letterIndex--;
         }
         // letter index cannot be < 0
-        if(letterIndex < 0) {
+        if (letterIndex < 0) {
             letterIndex = 0;
         }
     }
@@ -1529,18 +1540,20 @@ input.addEventListener('keydown', (e)=> {
     // check if answer is correct and apply the correct styling. 
     // Also increment 'errors' or 'correct'
     if(checkAnswerToIndex()) {
-        input.style.color = 'var(--text-color)';//'black';
+        // input.style.color = 'var(--text-color)';//'black';
+        fakeInput.classList.remove('red');
         // no points awarded for backspace
         if (/*e.keyCode == 8*/ e.key === "Backspace") {
             playClickSound();
             // if backspace, color it grey again
-            if(e.ctrlKey) {
+            if (e.ctrlKey) {
                 for (let i = 0; i < letterIndex; i++) {
-                    if(prompt.children[0].children[wordIndex].children[i]) {
+                    if (prompt.children[0].children[wordIndex].children[i]) {
                         prompt.children[0].children[wordIndex].children[i].style.color = 'var(--grey)';//'gray';
                     }
                 }
                 input.value = '';
+                fakeInput.innerText = '';
                 letterIndex = 0;
             } else {
                 if (prompt.children[0].children[wordIndex].children[letterIndex]) {
@@ -1559,21 +1572,23 @@ input.addEventListener('keydown', (e)=> {
         }
     }else {
         console.log('error');
-        input.style.color = 'var(--red)';//'red';
+        // input.style.color = 'var(--red)';//'red';
+        fakeInput.classList.add('red');
         // no points awarded for backspace
         if (/*e.keyCode == 8*/ e.key === "Backspace") {
             playClickSound();
             // if backspace, color it grey again
-            if(e.ctrlKey) {
+            if (e.ctrlKey) {
                 for (let i = 0; i < letterIndex; i++) {
-                    if(prompt.children[0].children[wordIndex].children[i]) {
+                    if (prompt.children[0].children[wordIndex].children[i]) {
                         prompt.children[0].children[wordIndex].children[i].style.color = 'var(--grey)';//'gray';
                     }
                 }
                 input.value = '';
+                fakeInput.innerText = '';
                 letterIndex = 0;
             } else {
-                if(prompt.children[0].children[wordIndex].children[letterIndex]) {
+                if (prompt.children[0].children[wordIndex].children[letterIndex]) {
                     prompt.children[0].children[wordIndex].children[letterIndex].style.color = 'var(--grey)';//'gray';
                 }
             }
@@ -1582,7 +1597,7 @@ input.addEventListener('keydown', (e)=> {
                    /*e.keyCode == 32*/ e.key === " ") {
             playErrorSound();
             errors++;
-            if(prompt.children[0].children[wordIndex].children[letterIndex-1]) {
+            if (prompt.children[0].children[wordIndex].children[letterIndex-1]) {
                 prompt.children[0].children[wordIndex].children[letterIndex-1].style.color = 'var(--red)';//'red';
             }
         }
@@ -1590,7 +1605,8 @@ input.addEventListener('keydown', (e)=> {
         if(!requireBackspaceCorrection && !checkAnswerToIndex()){
             //ignore input if the wrong char was typed (negate need to backspace errors - akin to KeyBr.com's behaviour)
             letterIndex--;
-            input.value = input.value.substr(0,input.value.length-1);
+            // input.value = input.value.substr(0,input.value.length-1);
+            fakeInput.innerText = fakeInput.innerText.slice(0, -1);
 
             // letter index cannot be < 0
             if(letterIndex < 0) {
@@ -1619,7 +1635,8 @@ input.addEventListener('keydown', (e)=> {
 // returns true if the letters typed SO FAR are correct
 function checkAnswerToIndex() {
     // user input
-    let inputVal = input.value;
+    // let inputVal = input.value;
+    let inputVal = fakeInput.innerText;
 
     // console.log('checking input ' +inputVal.slice(0,letterIndex) + '!');
     // console.log(correctAnswer.slice(0,letterIndex)+ '!');
@@ -1778,6 +1795,7 @@ function reset() {
      prompt.innerHTML = '';
      answerString = '';
      input.value = '';
+     fakeInput.innerText = '';
      answerWordArray = [];
 
 
@@ -1889,7 +1907,9 @@ function convertLineToHTML(letters) {
 function checkAnswer() {
     // console.log('correct answer: ' + correctAnswer);
     // user input
-    let inputVal = input.value;
+    // let inputVal = input.value;
+
+    let inputVal = fakeInput.innerText;
 
     return inputVal == correctAnswer;
 }
@@ -2097,7 +2117,8 @@ function containsUpperCase(word) {
 // called every time a correct word is typed
 function handleCorrectWord() {
     // make sure no 'incorrect' styling still exists
-    input.style.color = 'var(--text-color)';//'black';
+    // input.style.color = 'var(--text-color)';//'black';
+    fakeInput.classList.remove('red');
 
     //remove the first word from the answer string
     answerWordArray.shift();
@@ -2119,9 +2140,9 @@ function handleCorrectWord() {
         }
     }
 
-    let cur = document.querySelector('#id' + (score+1));
+    // let cur = document.querySelector('#id' + (score+1));
 
-    if(wordScrollingMode) {
+    if (wordScrollingMode) {
         deleteLatestWord = true;
         // update display
         prompt.classList.add('smoothScroll');
@@ -2131,7 +2152,7 @@ function handleCorrectWord() {
         prompt.style.left = '-' + promptOffset+ 'px';        
         // make already typed words transparent
         prompt.children[0].firstChild.style.opacity = 0;
-    }else {
+    } else {
         // if in paragraph mode, increase word index
         wordIndex++;
     }
@@ -2140,7 +2161,6 @@ function handleCorrectWord() {
     // save the correct answer to a variable before removing it 
     // from the answer string
     correctAnswer = answerWordArray[0];
-
 }
 
 // updates the numerator and denominator of the scoretext on 
