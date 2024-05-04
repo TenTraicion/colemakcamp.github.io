@@ -888,7 +888,7 @@ select {
 .typingArea #fakeInput {
   height: calc(8 * var(--_rem));
   font-size: calc(4 * var(--_rem));
-  width: 86%;
+  width: calc(86 * var(--_rem)); /*86%;*/
   margin: 0 auto;
   background: var(--foreground);
   border: 0;
@@ -897,9 +897,10 @@ select {
   padding: 0 2rem;
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 .typingArea #fakeInput.showCaret::after {
-  content: "";
+  content: " ";
   height: calc(4 * var(--_rem));
   width: 0.2rem;
   background: var(--accent-half);
