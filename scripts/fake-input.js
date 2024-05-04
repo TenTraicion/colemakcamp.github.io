@@ -12,10 +12,13 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Make caret static while typing
-input.addEventListener('keydown', function(e) {
-    if (specialKeys.includes(e.key)) {return;}
+// Auto scroll to end
+function scrollEnd() {
+    fakeInput.scrollLeft = fakeInput.scrollLeftMax;
+}
 
+// Make caret static while typing
+function caretHits() {
     fakeInput.setAttribute('data-hits', parseInt(fakeInput.getAttribute('data-hits')) + 1);
 
     // automatically starts flashing if user doesn't keep writing
@@ -24,4 +27,17 @@ input.addEventListener('keydown', function(e) {
             fakeInput.setAttribute('data-hits', parseInt(fakeInput.getAttribute('data-hits')) - 1);
         }
     }, 800);
+}
+
+input.addEventListener('keydown', function(e) {
+    if (e.key === "Backspace" || !specialKeys.includes(e.key)) {
+        caretHits();
+        scrollEnd();
+    }
 });
+
+input.addEventListener('compositionupdate', function() {
+    caretHits();
+    scrollEnd();
+});
+

@@ -1609,7 +1609,7 @@ input.addEventListener('keydown', (e)=> {
             fakeInput.innerText = fakeInput.innerText.slice(0, -1);
 
             // letter index cannot be < 0
-            if(letterIndex < 0) {
+            if (letterIndex < 0) {
                 letterIndex = 0;
             }
         }    
@@ -1948,7 +1948,9 @@ function endGame() {
     // update scoreText
     updateScoreText();
     // clear input field
-    document.querySelector('#userInput').value = '';
+    // document.querySelector('#userInput').value = '';
+    input.value = '';
+    fakeInput.innerText = '';
     // set letter index (where in the word the user currently is)
     // to the beginning of the word
     letterIndex = 0;
